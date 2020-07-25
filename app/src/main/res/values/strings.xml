@@ -2,5 +2,14 @@
     <string name="app_name">Money_Manager</string>
 
     <!-- TODO: Remove or change this placeholder text -->
+    <string-array name="planets_array">
+        <item>Ăn uống</item>
+        <item>Sinh hoạt</item>
+        <item>Đi lại</item>
+        <item>Lương</item>
+        <item>Khác</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

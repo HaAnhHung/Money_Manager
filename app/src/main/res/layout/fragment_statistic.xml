@@ -3,12 +3,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragment.Statistic">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragment.StatisticFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Thống kê"/>
+        android:orientation="vertical">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout_statistic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabIndicatorColor="@android:color/black"
+            app:tabTextColor="@android:color/black">
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewPager_statistic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </androidx.viewpager.widget.ViewPager>
+    </LinearLayout>
 
 </FrameLayout>

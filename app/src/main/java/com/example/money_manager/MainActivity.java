@@ -6,8 +6,9 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 
 import com.example.money_manager.Adapter.ViewPagerAdapter;
-import com.example.money_manager.Fragment.Add_deal;
-import com.example.money_manager.Fragment.Statistic;
+import com.example.money_manager.Fragment.AddDealFragment;
+import com.example.money_manager.Fragment.StatisticFragment;
+import com.example.money_manager.Fragment.TodayFragment;
 import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,8 +26,9 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tabLayout);
 
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new Statistic(), "Thống kê");
-        adapter.addFragment(new Add_deal(), "Thêm");
+        adapter.addFragment(new TodayFragment(), "Hôm nay");
+        adapter.addFragment(new AddDealFragment(), "Thêm giao dịch");
+        adapter.addFragment(new StatisticFragment(), "Thống kê");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp">
+
+    <ImageView
+        android:id="@+id/group_today_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_add_circle_black_24dp"/>
+    <TextView
+        android:id="@+id/group_today_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nhóm"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:layout_marginLeft="8dp"
+        android:textSize="20dp"/>
+
+    <TextView
+        android:id="@+id/money_today_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tiền"
+        android:layout_gravity="center"/>
+
+</LinearLayout>
