@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -95,82 +96,18 @@ public class TodayFragment extends Fragment {
                     adapter.notifyDataSetChanged();
                     recyclerview_today.setAdapter(adapter);
                 }
+//                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+//                fragmentTransaction.replace(R.id.today_fragment, new TodayFragment()).addToBackStack(null).commit();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-//        Log.d("hung", mDealReference.get());
 
-//        dealList = new ArrayList<>();
-//        Log.d("hung", addDealFragment.list.size()+"");
-//        if(addDealFragment.list != null) {
-//            for (String arr : addDealFragment.list) {
-//                Log.d("hung", arr);
-//                mDealReference.document(arr).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                    @Override
-//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                        dealList.add(documentSnapshot.toObject(Deal.class));
-//                    }
-//                }).addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//            }
-//            for (Deal deal : dealList) {
-//                Log.d("hung", deal.getGroup());
-//            }
-//        }
-//        adapter = new TodayAdapter(dealList);
+//        adapter = new TodayAdapter();
 //        recyclerview_today.setAdapter(adapter);
-//        mDealReference.get()
-////        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-////            @Override
-////            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-////                if(queryDocumentSnapshots.isEmpty()){
-////                    Toast.makeText(getContext(),"", Toast.LENGTH_SHORT).show();
-////                }else {
-////                    for(DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-////                        Log.d("hung", String.valueOf(queryDocumentSnapshots.size()));
-////                    }
-////                }
-////            }
-////        }).addOnFailureListener(new OnFailureListener() {
-////            @Override
-////            public void onFailure(@NonNull Exception e) {
-////
-////            }
-////        });
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if(task.isSuccessful()){
-////                    adapter = new TodayAdapter();
-////                    recyclerview_today.setAdapter(adapter);
-//                    //Log.d("hung", task.getResult().toString());
-//                    if(task.getResult() != null){
-//
-//                    }
-//                }else {
-//                    Log.d("hung", "Error getting documents: ", task.getException());
-////                    Log.d("hung", task.getResult().toString());
-//
-////                    adapter = new TodayAdapter(dealList);
-////                    recyclerview_today.setAdapter(adapter);
-//                }
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-        adapter = new TodayAdapter();
-        recyclerview_today.setAdapter(adapter);
 
         return view;
     }
