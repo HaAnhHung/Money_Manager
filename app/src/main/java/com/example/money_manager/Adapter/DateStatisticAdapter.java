@@ -1,8 +1,5 @@
 package com.example.money_manager.Adapter;
 
-import android.content.Context;
-import android.graphics.PorterDuff;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +29,7 @@ public class DateStatisticAdapter extends RecyclerView.Adapter<DateStatisticAdap
     @Override
     public DateStatisticAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemview = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.statistic, parent, false);
+                .inflate(R.layout.statistic_today, parent, false);
 
         return new MyViewHolder(itemview);
     }
@@ -45,7 +42,6 @@ public class DateStatisticAdapter extends RecyclerView.Adapter<DateStatisticAdap
 //        holder.expenses_tv.setText(statisticList.get(position).getExpenses());
 
         holder.date_tv.setText("25");
-        holder.total_tv.setText("Dư: 5000000000");
         holder.income_tv.setText("3000000");
         holder.expenses_tv.setText("2000000");
 
@@ -56,19 +52,17 @@ public class DateStatisticAdapter extends RecyclerView.Adapter<DateStatisticAdap
         int b = (int) (((float)expenses/(income+expenses))*100);
 
         holder.income_pgb.setProgress(a);
-        //holder.income_pgb.getIndeterminateDrawable().setColorFilter(0x00FF00, PorterDuff.Mode.SRC_IN);
         holder.expenses_pgb.setProgress(b);
-        //holder.expenses_pgb.getIndeterminateDrawable().setColorFilter(0xFF0000, android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 5;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView date_tv, total_tv, income_tv, expenses_tv;
+        TextView date_tv,income_tv, expenses_tv;
         ProgressBar income_pgb, expenses_pgb;
         CardView cardview_statistic;
 
@@ -76,7 +70,6 @@ public class DateStatisticAdapter extends RecyclerView.Adapter<DateStatisticAdap
             super(itemView);
 
             date_tv = itemView.findViewById(R.id.date_tv);
-            total_tv = itemView.findViewById(R.id.total_tv);
             income_tv = itemView.findViewById(R.id.income_tv);
             expenses_tv = itemView.findViewById(R.id.expenses_tv);
             income_pgb = itemView.findViewById(R.id.income_pgb);

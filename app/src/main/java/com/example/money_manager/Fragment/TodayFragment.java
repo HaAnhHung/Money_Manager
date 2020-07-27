@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,9 +27,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -83,31 +87,44 @@ public class TodayFragment extends Fragment {
                 .document(year).collection("Month")
                 .document(month).collection("Day")
                 .document(day).collection("Deal");
-        mDealReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()){
-                    dealList = new ArrayList<>();
-                    for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
-//                        Log.d("hung", documentSnapshot.getData().toString());
-                        dealList.add(documentSnapshot.toObject(Deal.class));
-                    }
-                    adapter = new TodayAdapter(dealList);
-                    adapter.notifyDataSetChanged();
-                    recyclerview_today.setAdapter(adapter);
-                }
-//                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-//                fragmentTransaction.replace(R.id.today_fragment, new TodayFragment()).addToBackStack(null).commit();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+       mDealReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+           @Override
+           public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+               if (error != null) {
+                   return;
+               }
 
-//        adapter = new TodayAdapter();
-//        recyclerview_today.setAdapter(adapter);
+               List<Deal> dealList = new ArrayList<>();
+               for (QueryDocumentSnapshot doc : value) {
+                   dealList.add(doc.toObject(Deal.class));
+               }
+
+               adapter = new TodayAdapter(dealList);
+               adapter.notifyDataSetChanged();
+               recyclerview_today.setAdapter(adapter);
+           }
+       });
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if(task.isSuccessful()){
+//                    dealList = new ArrayList<>();
+//                    for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
+//                        dealList.add(documentSnapshot.toObject(Deal.class));
+//                    }
+//
+//                    adapter = new TodayAdapter(dealList);
+//                    adapter.notifyDataSetChanged();
+//                    recyclerview_today.setAdapter(adapter);
+//                }
+//
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         return view;
     }

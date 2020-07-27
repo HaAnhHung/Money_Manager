@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.example.money_manager.Adapter.DateStatisticAdapter;
 import com.example.money_manager.Model.Statistic;
 import com.example.money_manager.R;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +21,12 @@ import java.util.List;
 public class DayFragment extends Fragment {
 
     private RecyclerView recyclerview_date;
-    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
     private List<Statistic> statisticList;
+
+    FirebaseFirestore fb;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,8 +46,9 @@ public class DayFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getContext());
         recyclerview_date.setLayoutManager(layoutManager);
 
-        mAdapter = new DateStatisticAdapter(statisticList);
-        recyclerview_date.setAdapter(mAdapter);
+        adapter = new DateStatisticAdapter(statisticList);
+        adapter.notifyDataSetChanged();
+        recyclerview_date.setAdapter(adapter);
 
         return view;
     }

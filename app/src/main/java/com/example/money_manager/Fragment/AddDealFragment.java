@@ -1,5 +1,6 @@
 package com.example.money_manager.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -18,6 +19,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.money_manager.Interface.IDataChange;
 import com.example.money_manager.Model.Deal;
 import com.example.money_manager.Model.Statistic;
 import com.example.money_manager.R;
@@ -27,26 +29,23 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AddDealFragment extends Fragment {
 
     private Spinner group_spin;
     private List<Statistic> statisticList;
-    private EditText money_edt, time_edt, id_edt, note_edt;
+    private EditText money_edt, time_edt, note_edt;
     private Button income_btn, expenses_btn;
 
     private String day;
     private String month;
     private String year;
 
-//    public List<String> list = new ArrayList<>();
-
     FirebaseFirestore fb;
 
-//    private OnFragmentInteractionListener mListener;
-//
+    IDataChange dataChange;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +62,6 @@ public class AddDealFragment extends Fragment {
         group_spin = view.findViewById(R.id.group_spin);
         money_edt = view.findViewById(R.id.money_edt);
         time_edt = view.findViewById(R.id.time_edt);
-        id_edt = view.findViewById(R.id.id_edt);
         note_edt = view.findViewById(R.id.note_edt);
         income_btn = view.findViewById(R.id.income_btn);
         expenses_btn = view.findViewById(R.id.expenses_btn);
@@ -73,12 +71,6 @@ public class AddDealFragment extends Fragment {
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         group_spin.setAdapter(adapter);
-
-//        final Deal deal = new Deal();
-//        deal.setMoney(money_edt.getText().toString());
-//        Log.i("hung",deal.getMoney());
-//        deal.setNote(note_edt.getText().toString());
-//        deal.setGroup(group_spin.getSelectedItem().toString());
 
         expenses_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,12 +87,10 @@ public class AddDealFragment extends Fragment {
                 month = date[1];
                 year = date[2];
 
-//                list.add(id_edt.getText().toString());
-
                 DocumentReference idDeal = fb.collection("Year").document(year)
                         .collection("Month").document(month)
                         .collection("Day").document(day)
-                        .collection("Deal").document(id_edt.getText().toString());
+                        .collection("Deal").document();
                 idDeal.set(deal).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -112,6 +102,10 @@ public class AddDealFragment extends Fragment {
                         Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+
+                reset();
+
+                dataChange.onDataChange();
             }
         });
 
@@ -119,11 +113,20 @@ public class AddDealFragment extends Fragment {
         return view;
     }
 
-    private void addDeal(){
-
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        dataChange = (IDataChange) context;
     }
 
-//    @Override
+    public void reset(){
+        money_edt.setText("");
+        time_edt.setText("");
+        time_edt.setText("");
+        note_edt.setText("");
+    }
+
+    //    @Override
 //    public void onAttach(Context context) {
 //        super.onAttach(context);
 //        if (context instanceof OnFragmentInteractionListener) {
