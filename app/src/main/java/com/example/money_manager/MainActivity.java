@@ -1,9 +1,11 @@
 package com.example.money_manager;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
 
 import com.example.money_manager.Adapter.ViewPagerAdapter;
 import com.example.money_manager.Fragment.AddDealFragment;
@@ -17,19 +19,24 @@ public class MainActivity extends AppCompatActivity implements IDataChange {
     private ViewPagerAdapter adapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private AddDealFragment addDealFragment = new AddDealFragment();
+    private TodayFragment todayFragment = new TodayFragment();
+    private StatisticFragment statisticFragment = new StatisticFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        addDealFragment.setDataChange(this);
+
         viewPager = findViewById(R.id.viewPager);
         tabLayout = findViewById(R.id.tabLayout);
 
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new TodayFragment(), "Hôm nay");
-        adapter.addFragment(new AddDealFragment(), "Thêm giao dịch");
-        adapter.addFragment(new StatisticFragment(), "Thống kê");
+        adapter.addFragment(todayFragment, "Hôm nay");
+        adapter.addFragment(addDealFragment, "Thêm giao dịch");
+        adapter.addFragment(statisticFragment, "Thống kê");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -38,5 +45,10 @@ public class MainActivity extends AppCompatActivity implements IDataChange {
     @Override
     public void onDataChange() {
         tabLayout.getTabAt(0).select();
+    }
+
+    @Override
+    public void timeData(String time) {
+
     }
 }

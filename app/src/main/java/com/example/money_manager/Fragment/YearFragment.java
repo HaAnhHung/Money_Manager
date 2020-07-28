@@ -1,37 +1,49 @@
 package com.example.money_manager.Fragment;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.money_manager.Adapter.DateStatisticAdapter;
 import com.example.money_manager.Adapter.YearStatisticAdapter;
+import com.example.money_manager.Interface.IDataChange;
 import com.example.money_manager.Interface.IItemActionListener;
+import com.example.money_manager.Model.InOut;
 import com.example.money_manager.Model.Statistic;
 import com.example.money_manager.R;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class YearFragment extends Fragment {
+public class YearFragment extends Fragment implements IItemActionListener{
 
-    private RecyclerView recyclerview_month;
-    private RecyclerView.Adapter adapter;
+    private RecyclerView recyclerview_year;
+    private YearStatisticAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
     private List<Statistic> statisticList;
 
-    IItemActionListener itemActionListener;
+    private IDataChange mDataChange;
+
+    private IItemActionListener clickListener;
+
+    private FirebaseFirestore fb;
+
+    private final String key = "hung";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,33 +56,35 @@ public class YearFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_year, container, false);
 
-        recyclerview_month = view.findViewById(R.id.recyclerview_year);
-        recyclerview_month.setHasFixedSize(true);
+        recyclerview_year = view.findViewById(R.id.recyclerview_year);
+        recyclerview_year.setHasFixedSize(true);
         statisticList = new ArrayList<>();
 
+        fb = FirebaseFirestore.getInstance();
+
         layoutManager = new LinearLayoutManager(getContext());
-        recyclerview_month.setLayoutManager(layoutManager);
+        recyclerview_year.setLayoutManager(layoutManager);
 
-        adapter = new YearStatisticAdapter(statisticList);
-        adapter.notifyDataSetChanged();
-        recyclerview_month.setAdapter(adapter);
+        CollectionReference collectionReference = fb.collection("Year");
+        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if(error!=null)
+                    return;
+                for(QueryDocumentSnapshot document : value){
+                    Statistic statistic = new Statistic();
+                    statistic.setDate(document.getId());
+                    statistic.setIcome(document.get("chi").toString());
+                    statistic.setExpenses(document.get("thu").toString());
+                    statisticList.add(statistic);
+                }
+                adapter = new YearStatisticAdapter(statisticList, getContext());
+                adapter.notifyDataSetChanged();
+                recyclerview_year.setAdapter(adapter);
+            }
+        });
 
-//        recyclerview_month.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-//            @Override
-//            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-//                return false;
-//            }
-//
-//            @Override
-//            public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-//
-//            }
-//
-//            @Override
-//            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-//
-//            }
-//        });
+        adapter.setClickListener(this);
         
         return view;
     }
@@ -78,7 +92,20 @@ public class YearFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        //this.itemActionListener = (IItemActionListener) context;
+    }
+
+    public void setmDataChange(IDataChange mDataChange) {
+        this.mDataChange = mDataChange;
+    }
+
+    @Override
+    public void onClick(View view, int position) {
+        mDataChange.onDataChange();
+
+        MonthFragment monthFragment = new MonthFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("year", statisticList.get(position).getDate());
+        monthFragment.setArguments(bundle);
     }
 //
 //    @Override

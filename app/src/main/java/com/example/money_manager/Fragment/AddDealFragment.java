@@ -44,7 +44,7 @@ public class AddDealFragment extends Fragment {
 
     FirebaseFirestore fb;
 
-    IDataChange dataChange;
+    private IDataChange dataChange;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,6 +95,7 @@ public class AddDealFragment extends Fragment {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+                        dataChange.onDataChange();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -104,8 +105,6 @@ public class AddDealFragment extends Fragment {
                 });
 
                 reset();
-
-                dataChange.onDataChange();
             }
         });
 
@@ -116,7 +115,11 @@ public class AddDealFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        dataChange = (IDataChange) context;
+        //dataChange = (IDataChange) context;
+    }
+
+    public void setDataChange(IDataChange iDataChange){
+        dataChange = iDataChange;
     }
 
     public void reset(){

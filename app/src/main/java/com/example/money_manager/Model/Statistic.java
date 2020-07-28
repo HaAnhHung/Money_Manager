@@ -1,7 +1,7 @@
 package com.example.money_manager.Model;
 
 public class Statistic {
-    String date, icome, expenses, total;
+    String date, icome, expenses;
 
     public Statistic() {
     }
@@ -10,15 +10,6 @@ public class Statistic {
         this.date = date;
         this.icome = icome;
         this.expenses = expenses;
-        this.total = total;
-    }
-
-    public String getTotal() {
-        return total;
-    }
-
-    public void setTotal(String total) {
-        this.total = total;
     }
 
     public String getDate() {
