@@ -80,11 +80,10 @@ public class YearFragment extends Fragment implements IItemActionListener{
                 }
                 adapter = new YearStatisticAdapter(statisticList, getContext());
                 adapter.notifyDataSetChanged();
+                adapter.setClickListener(YearFragment.this);
                 recyclerview_year.setAdapter(adapter);
             }
         });
-
-        adapter.setClickListener(this);
         
         return view;
     }
